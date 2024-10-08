@@ -19,6 +19,6 @@ mkfs.fat -F32 /dev/"$disk"1
 mkfs.ext4 -F /dev/"$disk"2
 
 #mounting the disks
+mount /dev/"$disk"2 /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/"$disk"1 /mnt/boot/efi
-mount /dev/"$disk"2 /mnt
