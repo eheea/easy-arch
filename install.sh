@@ -15,7 +15,7 @@ read -r disk
 } | fdisk /dev/"$disk"
 
 #formatting the disks
-mkfs.fat -F -F32 /dev/"$disk"1
+mkfs.fat -F32 /dev/"$disk"1
 mkfs.ext4 -F /dev/"$disk"2
 
 #mounting the disks
