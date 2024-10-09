@@ -21,6 +21,7 @@ read -r userpasswd
 echo "     "
 
 #making partitions for gpt
+umount -a
 { echo "g"
   echo "n"
   echo ""
