@@ -42,9 +42,12 @@ pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr networkman
 
 #generating fstab
 genfstab -U /mnt >> /mnt/etc/fstab
+echo "fstab was generated successfully"
+
+sleep 2
 
 #going into the newly installed system
-arch-chroot /mnt
+arch-chroot /mnt /bin/bash
 
 #clock config
 ln -sf /usr/share/zoneinfo/Asia/Baghdad /etc/localtime
