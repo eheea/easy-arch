@@ -93,8 +93,8 @@ echo "Custom sudoers file created successfully."
 sleep 1
 
 #enabling multilib
-sed -i 's/^#\[multilib\]/[multilib]/' /etc/pacman.conf
-sed -i 's/^#Include = /etc/pacman.d/mirrorlist/Include = /etc/pacman.d/mirrorlist/' /etc/pacman.conf
+sed -i '92s/^#//' /etc/pacman.conf
+sed -i '93s/^#//' /etc/pacman.conf
 sudo pacman -Sy
 echo "Multilib repository enabled and package database updated."
 
