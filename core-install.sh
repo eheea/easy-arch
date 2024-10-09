@@ -32,6 +32,9 @@ pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr networkman
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "fstab was generated successfully"
 
+#going into the newly installed system
+arch-chroot /mnt /bin/bash
+
 sleep 2
 
 ./post-install.sh 
