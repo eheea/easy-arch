@@ -1,9 +1,5 @@
 #!/bin/bash
 
-echo "please insert disk name (eg; sda,sdb)"
-read -r disk
-echo "        "
-
 echo "insert the user name"
 read -r username
 echo "        "
@@ -16,7 +12,7 @@ echo "please insert your user password"
 read -r userpasswd
 
 #going into the newly installed system
-arch-chroot /mnt
+arch-chroot /mnt /bin/bash
 
 #clock config
 ln -sf /usr/share/zoneinfo/Asia/Baghdad /etc/localtime
@@ -39,7 +35,7 @@ echo "$rootpasswd"
 #installing grub
 mkdir -p /boot/grub
 grub-mkconfig -o /boot/grub/grub.cfg
-grub-install /dev/"$disk"
+grub-install
 
 #adding a user
 useradd -m -G wheel,input,users -s /bin/bash "$username"
@@ -62,8 +58,8 @@ echo "Custom sudoers file created successfully."
 sleep 1
 
 #enabling multilib
-sed -i 's/^#\[multilib\]/[multilib]/' /etc/pacman.conf
-sed -i 's/^#Include = /etc/pacman.d/mirrorlist/Include = /etc/pacman.d/mirrorlist/' /etc/pacman.conf
+sed -i '92s/^#//' /etc/pacman.conf
+sed -i '93s/^#//' /etc/pacman.conf
 sudo pacman -Sy
 echo "Multilib repository enabled and package database updated."
 
