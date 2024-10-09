@@ -8,6 +8,10 @@ echo "insert the user name"
 read -r username
 echo "        "
 
+echo "insert the host name"
+read -r host
+echo "     "
+
 echo "please insert your root password"
 read -r rootpasswd
 echo "        "
@@ -51,12 +55,18 @@ arch-chroot /mnt /bin/bash << EOF
 ln -sf /usr/share/zoneinfo/Asia/Baghdad /etc/localtime
 hwclock --systohc
 
+#making swap
+mkswap -U clear --size 4G --file /swapfile
+swapon /swapfile
+echo "/swapfile none swap defaults 0 0"
+
 #locale config
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" >> locale.conf
 
 #Network Configuration
-echo "arch" >> /etc/hostname
+echo "$host" >> /etc/hostname
 systemctl enable NetworkManager
 
 #setting root password
@@ -92,12 +102,6 @@ sudo pacman -S --noconfirm  --needed git go base-devel && git clone https://aur.
 else echo "yay is already installed"
 fi
 
-#installing the desktop and apps
-sudo pacman -Sy --noconfirm gnome gdm neofetch fastfetch gedit go samba sane cups flatpak kitty bluez bluez-utils timeshift btop vlc vulkan-radeon lib32-vulkan-radeon gnome-tweaks fuse wget
-yay -S --needed --noconfirm arch-gaming-meta thorium-browser-bin vesktop ttf-ms-fonts auto-cpufreq protonup-qt
-flatpak install -y flathub com.mattjakeman.ExtensionManager
-flatpak install -y flathub it.mijorus.gearlever
-flatpak install -y flathub io.github.peazip.PeaZip
-flatpak install -y flathub com.dec05eba.gpu_screen_recorder
-sudo systemctl enable gdm
-echo "operation is finished. rebooting.."
+EOF
+
+umount -a
