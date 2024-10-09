@@ -51,7 +51,6 @@ ln -sf /usr/share/zoneinfo/Asia/Baghdad /etc/localtime
 hwclock --systohc
 
 #locale config
-sed -i '171 s/#//g' /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" >> locale.conf
 
