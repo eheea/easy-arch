@@ -1,4 +1,5 @@
 #!/bin/bash
+lsblk
 echo "please insert disk name (eg; sda,sdb)"
 read -r disk
 echo "        "
