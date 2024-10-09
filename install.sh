@@ -20,13 +20,6 @@ echo "please insert your user password"
 read -r userpasswd
 echo "     "
 
-echo "do you want a separate /home partition"
-echo "1) yes"
-echo "2) no"
-read -r answer
-case $answer in
-no) echo "installing system without a separate /home"
-
 #making partitions for gpt
 { echo "g"
   echo "n"
@@ -47,39 +40,7 @@ mkfs.fat -F32 /dev/"$disk"1
 #mounting the disks
 mount /dev/"$disk"2 /mnt
 mkdir -p /mnt/boot/efi
-mount /dev/"$disk"1 /mnt/boot/efi ;;
-
-yes) echo "installing the system with a separate /home"
-#making 3 partitions for gpt with /home
-{ echo "g"
-  echo "n"
-  echo ""
-  echo ""
-  echo "+1G"
-  echo "n"
-  echo ""
-  echo ""
-  echo "+10G"
-  echo "n"
-  echo " "
-  echo " "
-  echo " "
-  echo "w" 
-} | fdisk /dev/"$disk"
-
-#formatting the disks
-mkfs.ext4 -F /dev/"$disk"2
-mkfs.ext4 -F /dev/"$disk"3
-mkfs.fat -F32 /dev/"$disk"1
-
-#mounting the disks with a separate /home
-mount /dev/"$disk"2 /mnt
-mkdir -p /mnt/boot/efi
 mount /dev/"$disk"1 /mnt/boot/efi
-mkdir -p /mnt/home
-mount /dev/"$disk"3 /mnt/home ;;
-*) echo "not a valid entry"
-esac
 
 #installing the base system
 pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr networkmanager nano neofetch
