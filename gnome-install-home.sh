@@ -124,6 +124,7 @@ pacman -Sy
 su eheea
 mkdir /home/eheea/test
 cd /home/eheea/test
+sudo rm -rf /home/$username/test/yay
 sudo pacman -Sy --noconfirm git go
 sudo pacman -S --needed --noconfirm git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
 sudo pacman -S --noconfirm gnome gdm neofetch fastfetch gedit samba sane cups flatpak kitty bluez bluez-utils timeshift btop vlc vulkan-radeon lib32-vulkan-radeon gnome-tweaks fuse wget
