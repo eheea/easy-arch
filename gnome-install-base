@@ -31,25 +31,18 @@ umount -a
   echo "n"
   echo ""
   echo ""
-  echo "+10G"
-  echo "n"
-  echo " "
-  echo " "
-  echo " "
+  echo ""
   echo "w" 
 } | fdisk /dev/"$disk"
 
 #formatting the disks
 mkfs.ext4 -F /dev/"$disk"2
 mkfs.fat -F32 /dev/"$disk"1
-mkfs.ext4 -F /dev/"$disk"3
 
 #mounting the disks
 mount /dev/"$disk"2 /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/"$disk"1 /mnt/boot/efi
-mkdir -p /mnt/home
-mount /dev/"$disk"3 /mnt/home
 
 #installing the base system
 pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr networkmanager nano neofetch
@@ -90,7 +83,14 @@ pacman -Sy
 su eheea
 mkdir /home/eheea/test
 cd /home/eheea/test
-sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+sudo pacman -S --needed --noconfirm git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+sudo pacman -Sy --noconfirm gnome gdm neofetch fastfetch gedit go samba sane cups flatpak kitty bluez bluez-utils timeshift btop vlc vulkan-radeon lib32-vulkan-radeon gnome-tweaks fuse wget
+yay -S --needed --noconfirm arch-gaming-meta thorium-browser-bin vesktop ttf-ms-fonts auto-cpufreq protonup-qt
+flatpak install flathub com.mattjakeman.ExtensionManager it.mijorus.gearlever io.github.peazip.PeaZip  com.dec05eba.gpu_screen_recorder
 exit
 EOF
 umount -a
+systemctl enable gdm
+echo "system was successfully installed.. rebooting"
+sleep 1
+reboot

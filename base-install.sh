@@ -83,8 +83,10 @@ pacman -Sy
 su eheea
 mkdir /home/eheea/test
 cd /home/eheea/test
-sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+sudo pacman -S --needed --noconfirm git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
 exit
 EOF
 umount -a
+echo "system was successfully installed.. rebooting"
+sleep 1
 reboot
