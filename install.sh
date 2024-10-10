@@ -52,59 +52,38 @@ genfstab -U /mnt >> /mnt/etc/fstab
 echo "fstab was generated successfully"
 
 #going into the newly installed system
-arch-chroot /mnt /bin/bash << EOF
-
-#clock config
+arch-chroot /mnt << EOF
 ln -sf /usr/share/zoneinfo/Asia/Baghdad /etc/localtime
 hwclock --systohc
-
-#making swap
+echo "en_US.UTF-8" >> /etc/locale.gen
+locale-gen
+echo "en_US.UTF-8" >> /etc/locale.conf
+echo "$host" >> /etc/hostname
 mkswap -U clear --size 4G --file /swapfile
 swapon /swapfile
-echo "/swapfile none swap defaults 0 0"
-
-#locale config
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-locale-gen
-echo "LANG=en_US.UTF-8" >> locale.conf
-
-#Network Configuration
-echo "$host" >> /etc/hostname
-systemctl enable NetworkManager
-
-#setting root password
-{ echo "$rootpasswd"
+echo "/swapfile none swap default 0 0" >> /etc/fstab
+{
 echo "$rootpasswd"
-
+echo "$rootpasswd"
 } | passwd
-
-#installing grub
+useradd -m -G wheel,input -s /bin/bash $username
+{
+echo "$userpasswd"
+echo "$userpasswd"
+} | passwd $username
+echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+systemctl enable NetworkManager
 mkdir -p /boot/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 grub-install
-
-#adding a user
-useradd -m -G wheel,input,users -s /bin/bash "$username"
-{ echo "$userpasswd"
-echo "$userpasswd"
-
-} | passwd "$username"
-
-#making the user able to use sudo
-echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
-
-#enabling multilib
-sed -i '92s/^#//' /etc/pacman.conf
-sed -i '93s/^#//' /etc/pacman.conf
-sudo pacman -Sy
-echo "Multilib repository enabled and package database updated."
-
-#installing the AUR helper
-if [ ! -f /usr/bin/yay ]; then
-sudo pacman -S --noconfirm  --needed git go base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm
-else echo "yay is already installed"
-fi
-
+echo "     " >> /etc/pacman.conf
+echo "[multilib]" >> /etc/pacman.conf
+echo " Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+pacman -Sy
+su eheea
+mkdir /home/eheea/test
+cd /home/eheea/test
+sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+exit
 EOF
-
 umount -a
