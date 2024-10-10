@@ -125,7 +125,7 @@ su eheea
 mkdir /home/eheea/test
 cd /home/eheea/test
 sudo rm -rf /home/$username/test/yay
-sudo pacman -S --needed --noconfirm git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+sudo pacman -S --needed --noconfirm git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm
 exit
 EOF
 echo "system was successfully installed.. rebooting"
