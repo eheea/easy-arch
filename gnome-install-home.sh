@@ -124,7 +124,8 @@ pacman -Sy
 su eheea
 mkdir /home/eheea/test
 cd /home/eheea/test
-sudo pacman -S --needed --noconfirm git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+sudo pacman -Sy --noconfirm git go
+sudo pacman -Sy --needed --noconfirm git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
 sudo pacman -Sy --noconfirm gnome gdm neofetch fastfetch gedit go samba sane cups flatpak kitty bluez bluez-utils timeshift btop vlc vulkan-radeon lib32-vulkan-radeon gnome-tweaks fuse wget
 yay -S --needed --noconfirm arch-gaming-meta thorium-browser-bin vesktop ttf-ms-fonts auto-cpufreq protonup-qt
 flatpak install flathub com.mattjakeman.ExtensionManager it.mijorus.gearlever io.github.peazip.PeaZip  com.dec05eba.gpu_screen_recorder
