@@ -25,6 +25,8 @@ read -r answer
 
 case $answer in
 no) #making partitions for gpt
+echo "enter the size of the root partition (eg; 80G)"
+read -r rootfs
 unmount -a
 { echo "g"
   echo "n"
@@ -34,7 +36,7 @@ unmount -a
   echo "n"
   echo ""
   echo ""
-  echo "+10G"
+  echo "+$rootfs"
   echo "n"
   echo " "
   echo " "
