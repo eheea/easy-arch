@@ -24,7 +24,7 @@ echo "do you already have a /home that you wish to mount? (yes/no)"
 read -r answer
 
 case $answer in
-no) #making partitions for gpt
+no)
 echo "enter the size of the root partition (eg; 80G)"
 read -r rootfs
 unmount -a
