@@ -85,6 +85,7 @@ mkdir /home/eheea/test
 cd /home/eheea/test
 sudo rm -rf /home/$username/test/yay
 sudo pacman -S --needed --noconfirm git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm
+yay -S auto-cpufreq --noconfirm && sudo auto-cpufreq --install && sudo auto-cpufreq force performance
 exit
 EOF
 umount -a
