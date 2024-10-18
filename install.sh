@@ -6,6 +6,7 @@ echo "2-no"
 read -r hi
 case $hi in
 1) 
+clear
 lsblk
 echo "please insert disk name (eg; sda,sdb)"
 read -r disk
@@ -149,7 +150,9 @@ reboot
 
 
 
-2)lsblk
+2)
+clear
+lsblk
 echo "please insert disk name (eg; sda,sdb)"
 read -r disk
 echo "        "
