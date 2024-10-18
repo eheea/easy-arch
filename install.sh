@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 echo -e "\e[32mdo you want a separate /home type install (basically separating the home folder on another partition or disk for backup purposes)\e[0m"
 echo "1-yes"
 echo "2-no"
