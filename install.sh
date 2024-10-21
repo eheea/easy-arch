@@ -106,9 +106,9 @@ echo "fstab was generated successfully"
 arch-chroot /mnt << EOF
 ln -sf /usr/share/zoneinfo/Asia/Baghdad /etc/localtime
 hwclock --systohc
-echo "en_US.UTF-8" >> /etc/locale.gen
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-8 UTF-8" >> /etc/locale.conf
+echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 echo "$host" >> /etc/hostname
 mkswap -U clear --size 4G --file /swapfile
 swapon /swapfile
@@ -208,7 +208,7 @@ echo "fstab was generated successfully"
 arch-chroot /mnt << EOF
 ln -sf /usr/share/zoneinfo/Asia/Baghdad /etc/localtime
 hwclock --systohc
-echo "en_US.UTF-8" >> /etc/locale.gen
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 echo "$host" >> /etc/hostname
@@ -238,7 +238,6 @@ mkdir /home/eheea/test
 cd /home/eheea/test
 sudo rm -rf /home/$username/test/yay
 sudo pacman -S --needed --noconfirm git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm
-yay -S auto-cpufreq --noconfirm
 exit
 EOF
 umount -a
