@@ -137,7 +137,6 @@ cd /home/eheea/test
 sudo rm -rf /home/$username/test/yay
 sudo pacman -Sy --noconfirm git go
 sudo pacman -S --needed --noconfirm git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm
-yay -S auto-cpufreq --noconfirm
 exit
 EOF
 echo "system was successfully installed.. rebooting"
