@@ -43,7 +43,7 @@ echo " "
 echo " "
 echo " "
 echo "w"
-) | fdisk -F /dev/"$disk"
+) | fdisk /dev/"$disk"
 
 
 #formatting disks
