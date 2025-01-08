@@ -48,7 +48,7 @@ echo "w"
 
 #formatting disks
 mkfs.fat -F32 /dev/"$disk"1
-mkfs.ext4 /dev/"$disk"3
+mkfs.ext4 -F /dev/"$disk"3
 mkswap /dev/"$disk"2
 
 
