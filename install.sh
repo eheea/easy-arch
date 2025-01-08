@@ -24,7 +24,6 @@ echo " "
 echo "enter the root password"
 read -r passwd
 
-umount -a
 clear
 
 #partitioning disks
