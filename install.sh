@@ -19,3 +19,7 @@ echo " "
 echo " "
 echo "w"
 ) | fdisk /dev/"$disk"
+
+mkfs.fat -F32 /dev/"$disk"1
+mkfs.ext4 /dev/"$disk"3
+mkswap /dev/"$disk"2
