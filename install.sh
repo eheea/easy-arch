@@ -84,20 +84,19 @@ echo "$userpass"
 echo "$userpass"
 ) | passwd "$name"
 
-systemctl enable NetowrkManager
-mkdir -P /boot/grub
+systemctl enable NetworkManager
+mkdir -p /boot/grub
 grub-mkconfig -o /boot/grub/grub.cfg
-grub-install /dev/"$disk"
+grub-install /dev/$disk
 
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 sed -i '92 s/^#//' /etc/pacman.conf
 sed -i '93 s/^#//' /etc/pacman.conf
 pacman -Sy
 su eheea
-sudo pacman -Sy --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && rm yay
+sudo pacman -Sy --needed git base-devel --noconfirm && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && rm yay
 exit
 EOF
 
 umount -a
 reboot
-
