@@ -17,6 +17,9 @@ read -r host
 echo "enter the root password"
 read -r passwd
 
+umount -a
+clear
+
 #partitioning disks
 (
 echo "g"
