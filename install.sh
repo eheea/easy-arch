@@ -8,11 +8,17 @@ clear
 echo "enter your username"
 read -r name
 
+echo " "
+
 echo "enter your user password"
 read -r userpass
 
+echo " "
+
 echo "enter the machine's name"
 read -r host
+
+echo " "
 
 echo "enter the root password"
 read -r passwd
