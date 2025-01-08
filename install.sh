@@ -28,3 +28,6 @@ mount /dev/"$disk"3 /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/"$disk"1 /mnt/boot/efi
 swapon /dev/"$disk"2
+
+pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr nano neofetch networkmanager networkmanager-openvpn network-manager-applet ntfs-3g dosfstools fuse flatpak clutter
+genfstab -U /mnt >> /mnt/etc/fstab
