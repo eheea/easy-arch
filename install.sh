@@ -23,3 +23,8 @@ echo "w"
 mkfs.fat -F32 /dev/"$disk"1
 mkfs.ext4 /dev/"$disk"3
 mkswap /dev/"$disk"2
+
+mount /dev/"$disk"3 /mnt
+mkdir -p /mnt/boot/efi
+mount /dev/"$disk"1 /mnt/boot/efi
+swapon /dev/"$disk"2
