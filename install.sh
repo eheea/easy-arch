@@ -25,6 +25,9 @@ echo "enter the root password"
 read -r passwd
 
 clear
+pacman-key --init
+pacman -Sy
+clear
 
 #partitioning disks
 (
@@ -59,8 +62,6 @@ swapon /dev/"$disk"2
 
 
 #installing the system
-pacman-key --init
-pacman -Sy
 pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr nano neofetch networkmanager networkmanager-openvpn network-manager-applet ntfs-3g dosfstools fuse flatpak clutter
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "fstab was successfully generated"
