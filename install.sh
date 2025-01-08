@@ -2,7 +2,8 @@
 #prompts for name and passwords
 clear
 lsblk
-echo "select which disk to erase and install arch linux on (eg; sda,sdb,vda...etc)"
+echo " "
+echo -e "\033[32mselect which disk to erase and install arch linux on (eg; sda,sdb,vda...etc)\033[0m"
 read -r disk
 clear
 echo "enter your username"
