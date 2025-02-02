@@ -66,7 +66,7 @@ tar xvf cachyos-repo.tar.xz && cd cachyos-repo
 sudo ./cachyos-repo.sh
 
 #installing the system
-pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr nano neofetch networkmanager networkmanager-openvpn network-manager-applet ntfs-3g dosfstools fuse flatpak clutter 
+pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr nano neofetch networkmanager networkmanager-openvpn network-manager-applet ntfs-3g dosfstools fuse flatpak clutter
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "fstab was successfully generated"
 
@@ -96,6 +96,10 @@ grub-install /dev/$disk
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 sed -i '92 s/^#//' /etc/pacman.conf
 sed -i '93 s/^#//' /etc/pacman.conf
+
+curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
+tar xvf cachyos-repo.tar.xz && cd cachyos-repo
+sudo ./cachyos-repo.sh
 EOF
 
 umount -a
