@@ -13,7 +13,8 @@ read -r name
 echo " "
 
 echo "Enter your user password"
-read -r userpass
+# Invisible input for user password
+read -s -r userpass
 echo " "
 
 echo "Enter the machine's name"
@@ -21,7 +22,8 @@ read -r host
 echo " "
 
 echo "Enter the root password"
-read -r passwd
+# Invisible input for root password
+read -s -r passwd
 clear
 
 # Initialize pacman keyring and update
