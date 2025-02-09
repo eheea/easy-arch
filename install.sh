@@ -38,12 +38,8 @@ echo "n"          # Create a new partition
 echo " "          # Accept default partition number (1)
 echo " "          # Accept default first sector
 echo "+1G"        # Set size for the first partition
-echo "n"          # Create another new partition
-echo " "          # Accept default partition number (2)
-echo " "          # Accept default first sector
-echo "+16G"       # Set size for the second partition
 echo "n"          # Create another new partition (for root)
-echo " "          # Accept default partition number (3)
+echo " "          # Accept default partition number (2)
 echo " "          # Accept default first sector
 echo " "          # Use remaining space
 echo "w"          # Write changes
@@ -51,14 +47,12 @@ echo "w"          # Write changes
 
 # Format the partitions
 mkfs.fat -F32 /dev/"$disk"1
-mkfs.ext4 -F /dev/"$disk"3
-mkswap /dev/"$disk"2
+mkfs.ext4 -F /dev/"$disk"2
 
 # Mount the partitions
-mount /dev/"$disk"3 /mnt
+mount /dev/"$disk"2 /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/"$disk"1 /mnt/boot/efi
-swapon /dev/"$disk"2
 
 # Adding the CachyOS repos (only needed inside chroot)
 curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
