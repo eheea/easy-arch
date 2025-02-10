@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 echo "welcome to the auto arch installer"
 echo "please select the disk you wish to install archlinux on (eg.. sda.sdb.vda.)"
 lsblk
@@ -64,16 +65,25 @@ clear
 echo "enter username"
 read -r "username"
 
+echo "       "
 echo "enter user password"
 read -r -s "userpasswd"
 
+echo "       "
+
 echo "enter the computer's name"
 read -r "hostname"
+
+echo "       "
 
 echo "enter root password (if you just press enter root account will be disabled)"
 read -r -s "rootpasswd"
 
 if [ $home_stats = "yes" ]; then
+umount  /dev/"$disk"1
+umount /dev/"$disk"2
+umount /dev/"$disk"3
+
 (
 echo "g"
 echo "n"
@@ -102,6 +112,10 @@ mount /dev/"$disk"3 /mnt/home
 mount /dev/"$disk"1 /mnt/boot/efi
 
 else
+umount  /dev/"$disk"1
+umount /dev/"$disk"2
+umount /dev/"$disk"3
+
 (
 echo "g"
 echo "n"
