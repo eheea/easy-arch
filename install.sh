@@ -2,7 +2,7 @@
 clear
 # a start to the script asking which disk to install archlinux on
 echo -e "\e[32mwelcome to the auto arch installer\e[0m"
-echo "please select the disk you wish to install archlinux on (eg.. sda.sdb.vda.)"
+echo -e "\e[32mplease select the disk you wish to install archlinux on (eg.. sda.sdb.vda.)\e[0m"
 lsblk
 echo "    "
 read -r "disk"
@@ -58,11 +58,13 @@ clear
 echo "select the login manager. (despite it saying its for gnome or kde they work on everything just pick what you like)"
 echo "1) SDDM (for KDE)"
 echo "2) GDM (for GNOME)"
+echo "3) no login manager"
 
 read -r "login"
 case $login in
 1) LM=sddm ;;
 2) LM=gdm ;;
+3) clear
 esac
 
 clear
