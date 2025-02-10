@@ -8,6 +8,54 @@ echo -e "\033[32mSelect which disk to erase and install Arch Linux on (e.g., sda
 read -r disk
 clear
 
+echo "What desktop do you want?"
+echo "1) KDE"
+echo "2) GNOME"
+echo "3) XFCE"
+echo "4) Cinnamon"
+echo "5) MATE"
+echo "6) LXQt"
+echo "7) Budgie"
+echo "8) Deepin"
+echo "9) No desktop"
+
+read -r desktop
+
+case "$desktop" in
+  1)
+    desktop_env="plasma-meta"
+    ;;
+  2)
+    desktop_env="gnome"
+    ;;
+  3)
+    desktop_env="xfce4 xfce4-goodies"
+    ;;
+  4)
+    desktop_env="cinnamon"
+    ;;
+  5)
+    desktop_env="mate mate-extra"
+    ;;
+  6)
+    desktop_env="lxqt"
+    ;;
+  7)
+    desktop_env="budgie-desktop"
+    ;;
+  8)
+    desktop_env="deepin"
+    ;;
+  9)
+    echo "No desktop will be installed."
+    exit 0                                           
+    ;;
+  *)
+    echo "Invalid choice, please select a valid option."
+    exit 1                          
+    ;;
+esac
+
 echo "Enter your username"
 read -r name
 echo " "
@@ -60,7 +108,7 @@ tar xvf cachyos-repo.tar.xz && cd cachyos-repo
 ./cachyos-repo.sh
 
 # Install the base system
-pacstrap /mnt base base-devel linux linux-firmware grub efibootmgr nano neofetch networkmanager networkmanager-openvpn network-manager-applet ntfs-3g dosfstools fuse flatpak clutter
+pacstrap /mnt base base-devel linux-cachyos linux-firmware grub efibootmgr nano neofetch networkmanager networkmanager-openvpn network-manager-applet ntfs-3g dosfstools fuse flatpak clutter cachyos-settings cachyos-kernel-manager yay "$desktop_env"
 
 # Generate the fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -72,7 +120,7 @@ ln -sf /usr/share/zoneinfo/Asia/Baghdad /etc/localtime
 hwclock --systohc
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
-echo "en_US.UTF-8" >> /etc/locale.conf
+echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 echo "$host" > /etc/hostname
 
 # Set root password
