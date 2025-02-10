@@ -47,12 +47,10 @@ case "$desktop" in
     desktop_env="deepin"
     ;;
   9)
-    echo "No desktop will be installed."
-    exit 0                                           
+    echo "No desktop will be installed."                                   
     ;;
   *)
-    echo "Invalid choice, please select a valid option."
-    exit 1                          
+    echo "Invalid choice, please select a valid option."            
     ;;
 esac
 
