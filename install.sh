@@ -53,6 +53,7 @@ case "$desktop" in
     echo "Invalid choice, please select a valid option."            
     ;;
 esac
+clear
 
 echo "Enter your username"
 read -r name
