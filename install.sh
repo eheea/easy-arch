@@ -1,154 +1,124 @@
 #!/bin/bash
-
-# Prompt for name and passwords
-clear
+echo "welcome to the auto arch installer"
+echo "please select the disk you wish to install archlinux on (eg.. sda.sdb.vda.)"
 lsblk
-echo " "
-echo -e "\033[32mSelect which disk to erase and install Arch Linux on (e.g., sda, sdb, vda...etc)\033[0m"
-read -r disk
+read -r "disk"
 clear
 
-echo "What desktop do you want?"
-echo "1) KDE"
-echo "2) GNOME"
-echo "3) XFCE"
-echo "4) Cinnamon"
-echo "5) MATE"
-echo "6) LXQt"
-echo "7) Budgie"
-echo "8) Deepin"
-echo "9) No desktop"
+echo "do you want a /home partition? (can be useful for disk extension and backups)"
+echo "1) yes"
+echo "2) no"
 
-read -r desktop
-
-case "$desktop" in
-  1)
-    desktop_env="plasma-meta"
-    ;;
-  2)
-    desktop_env="gnome"
-    ;;
-  3)
-    desktop_env="xfce4 xfce4-goodies"
-    ;;
-  4)
-    desktop_env="cinnamon"
-    ;;
-  5)
-    desktop_env="mate mate-extra"
-    ;;
-  6)
-    desktop_env="lxqt"
-    ;;
-  7)
-    desktop_env="budgie-desktop"
-    ;;
-  8)
-    desktop_env="deepin"
-    ;;
-  9)
-    echo "No desktop will be installed."                                   
-    ;;
-  *)
-    echo "Invalid choice, please select a valid option."            
-    ;;
+read -r "home_agree"
+case $home_agree in
+1) home_stats=yes ;;
+2) clear ;;
+*) echo "please enter a valid value"
+exit 2 ;;
 esac
 clear
 
-echo "Enter your username"
-read -r name
-echo " "
+if [ "$home_stats" = "yes" ] ; then
+echo "enter the size of the root partition (40-100GB is recommened, the rest of the disk space will be used on the /home)"
+read -r "root_space"
+else clear
+fi
 
-echo "Enter your user password"
-# Invisible input for user password
-read -s -r userpass
-echo " "
+echo "select the desktop environemt"
+echo "1) KDE"
+echo "2) gnome"
+echo "3) cinnamon"
+echo "4) xfce"
+echo "5) lxqt"
+echo "6) mate"
+echo "7) no desktop"
 
-echo "Enter the machine's name"
-read -r host
-echo " "
+read -r "desktop"
+case "$desktop" in
+1) desktop_env=plasma-meta ;;
+2) desktop_env=gnome ;;
+3) desktop_env=cinnamon ;;
+4) desktop_env=xfce4 xfce4-goodies ;;
+5) desktop_env=lxqt ;;
+6) desktop_env=mate ;;
+7) echo "no desktop will be installed" ;;
+8) echo "invalid option. please run the script again using (./install.sh)"
+exit 1
+;;
+esac
 
-echo "Enter the root password"
-# Invisible input for root password
-read -s -r passwd
 clear
 
-# Initialize pacman keyring and update
-pacman-key --init
-pacman -Sy --noconfirm
+echo "select the login manager. (despite it saying its for gnome or kde they work on everything just pick what you like)"
+echo "1) SDDM (for KDE)"
+echo "2) GDM (for GNOME)"
+
+read -r "login"
+case $login in
+1) LM=sddm ;;
+2) LM=gdm ;;
+esac
+
 clear
 
-# Partition the disk
+echo "enter username"
+read -r "username"
+
+echo "enter user password"
+read -r -s "userpasswd"
+
+echo "enter the computer's name"
+read -r "hostname"
+
+echo "enter root password (if you just press enter root account will be disabled)"
+read -r -s "rootpasswd"
+
+if [ $home_stats = "yes" ]; then
 (
-echo "g"          # Create a new GPT partition table
-echo "n"          # Create a new partition
-echo " "          # Accept default partition number (1)
-echo " "          # Accept default first sector
-echo "+1G"        # Set size for the first partition
-echo "n"          # Create another new partition (for root)
-echo " "          # Accept default partition number (2)
-echo " "          # Accept default first sector
-echo " "          # Use remaining space
-echo "w"          # Write changes
+echo "g"
+echo "n"
+echo " "
+echo " "
+echo "+1G"
+echo "n"
+echo " "
+echo " "
+echo "+$root_space"
+echo "n"
+echo " "
+echo " "
+echo " "
+echo "w"
 ) | fdisk /dev/"$disk"
 
-# Format the partitions
+mkfs.ext4 /dev/"$disk"3
+mkfs.ext4 /dev/"$disk"2
 mkfs.fat -F32 /dev/"$disk"1
-mkfs.ext4 -F /dev/"$disk"2
 
-# Mount the partitions
+mount /dev/"$disk"2 /mnt
+mkdir -p /mnt/boot/efi
+mkdir -p /mnt/home
+mount /dev/"$disk"3 /mnt/home
+mount /dev/"$disk"1 /mnt/boot/efi
+
+else
+(
+echo "g"
+echo "n"
+echo " "
+echo " "
+echo "+1G"
+echo "n"
+echo " "
+echo " "
+echo " "
+echo "w"
+) | fdisk /dev/"$disk"
+
+mkfs.ext4 /dev/"$disk"2
+mkfs.fat -F32 /dev/"$disk"1
+
 mount /dev/"$disk"2 /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/"$disk"1 /mnt/boot/efi
-
-# Adding the CachyOS repos (only needed inside chroot)
-curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
-tar xvf cachyos-repo.tar.xz && cd cachyos-repo
-./cachyos-repo.sh
-
-# Install the base system
-pacstrap /mnt base base-devel linux-cachyos linux-firmware grub efibootmgr nano neofetch networkmanager networkmanager-openvpn network-manager-applet ntfs-3g dosfstools fuse flatpak clutter cachyos-settings cachyos-kernel-manager yay "$desktop_env"
-
-# Generate the fstab
-genfstab -U /mnt >> /mnt/etc/fstab
-echo "fstab was successfully generated"
-
-# Entering the new installed system
-arch-chroot /mnt << EOF
-ln -sf /usr/share/zoneinfo/Asia/Baghdad /etc/localtime
-hwclock --systohc
-echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
-locale-gen
-echo "LANG=en_US.UTF-8" >> /etc/locale.conf
-echo "$host" > /etc/hostname
-
-# Set root password
-echo "$passwd" | passwd
-# Create a new user
-useradd -m -G wheel,input -s /bin/bash "$name"
-echo "$userpass" | passwd "$name"
-
-# Enable NetworkManager
-systemctl enable NetworkManager
-
-# Install and configure GRUB
-mkdir -p /boot/grub
-grub-mkconfig -o /boot/grub/grub.cfg
-grub-install /dev/$disk
-
-# Allow wheel group users to run sudo without password
-echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-# Uncomment necessary lines in pacman.conf
-sed -i 's/^#\[multilib\]/\[multilib\]/' /etc/pacman.conf
-sed -i 's/^#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/' /etc/pacman.conf
-
-# Re-run CachyOS repo script inside the chroot (this was duplicated earlier)
-curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
-tar xvf cachyos-repo.tar.xz && cd cachyos-repo
-./cachyos-repo.sh
-EOF
-
-# Unmount everything and reboot
-umount -R /mnt
-reboot
+fi
