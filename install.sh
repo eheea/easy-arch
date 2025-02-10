@@ -1,11 +1,14 @@
 #!/bin/bash
 clear
-echo "welcome to the auto arch installer"
+# a start to the script asking which disk to install archlinux on
+echo -e "\e[32mwelcome to the auto arch installer\e[0m"
 echo "please select the disk you wish to install archlinux on (eg.. sda.sdb.vda.)"
 lsblk
+echo "    "
 read -r "disk"
 clear
 
+# asking for a home partition
 echo "do you want a /home partition? (can be useful for disk extension and backups)"
 echo "1) yes"
 echo "2) no"
@@ -25,6 +28,7 @@ read -r "root_space"
 else clear
 fi
 
+#asking for a desktop environment
 echo "select the desktop environemt"
 echo "1) KDE"
 echo "2) gnome"
@@ -36,7 +40,7 @@ echo "7) no desktop"
 
 read -r "desktop"
 case "$desktop" in
-1) desktop_env=plasma-meta ;;
+1) desktop_env=plasma-meta dolphin konsole ;;
 2) desktop_env=gnome ;;
 3) desktop_env=cinnamon ;;
 4) desktop_env=xfce4 xfce4-goodies ;;
@@ -50,6 +54,7 @@ esac
 
 clear
 
+#asking for a login manager
 echo "select the login manager. (despite it saying its for gnome or kde they work on everything just pick what you like)"
 echo "1) SDDM (for KDE)"
 echo "2) GDM (for GNOME)"
@@ -62,6 +67,7 @@ esac
 
 clear
 
+#asking for information
 echo "enter username"
 read -r "username"
 
@@ -79,7 +85,9 @@ echo "       "
 echo "enter root password (if you just press enter root account will be disabled)"
 read -r -s "rootpasswd"
 
-if [ $home_stats = "yes" ]; then
+
+#disk partitioning
+if [ "$home_stats" = "yes" ]; then
 umount  /dev/"$disk"1
 umount /dev/"$disk"2
 umount /dev/"$disk"3
@@ -136,3 +144,56 @@ mount /dev/"$disk"2 /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/"$disk"1 /mnt/boot/efi
 fi
+
+#adding cachyos repos
+curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
+tar xvf cachyos-repo.tar.xz && cd cachyos-repo
+./cachyos-repo.sh
+
+#installing the system
+pacstrap -K /mnt base base-devel linux-cachyos linux-firmware grub efibootmgr nano fastfetch fuse clutter ntfs-3g dosfstools yay auto-cpufreq heroic-games-launcher mangohud goverlay winetricks lutris firefox "$desktop_env" "$LM"
+
+#generating fstab
+genfstab -U /mnt >> /mnt/etc/fstab
+
+#moving in the newly installed system
+arch-chroot /mnt << EOF
+ln -sf /usr/share/zoneinfo/Asia/Baghdad /etc/localtime
+hwclock --systohc
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+locale-gen
+echo "LANG=en_US.UTF-8" >> /etc/locale.conf
+echo "$hostname" >> /etc/hostname
+(
+echo "$rootpasswd"
+echo "$rootpasswd"
+) | passwd
+
+useradd -m -G wheel,input,audio,video,storage,lp -s /bin/bash $username
+
+(
+echo "$userpasswd"
+echo "$userpasswd"
+) | passwd $username
+
+mkdir -p /boot/grub
+grub-mkconfig -o /boot/grub/grub.cfg
+grub-install /dev/$disk
+
+systemctl enable NetworkManager $LM
+
+sed -i 's/#\[multilib\]/[multilib]/g' /etc/pacman.conf
+sed -i 's/#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/g' /etc/pacman.conf
+
+su eheea
+curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
+tar xvf cachyos-repo.tar.xz && cd cachyos-repo
+./cachyos-repo.sh
+
+yay -S cachyos-gaming-meta --noconfirm
+exit
+exit
+EOF
+
+umount -R /mnt
+reboot
