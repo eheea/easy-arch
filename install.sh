@@ -155,7 +155,7 @@ tar xvf cachyos-repo.tar.xz && cd cachyos-repo
 sed -i '/^ParallelDownloads = 5/s/^/#/' /etc/pacman.conf
 
 #installing the system
-pacstrap -K /mnt base base-devel linux-cachyos linux-firmware grub efibootmgr nano fastfetch fuse clutter ntfs-3g dosfstools yay auto-cpufreq heroic-games-launcher mangohud goverlay lutris firefox --noconfirm
+pacstrap -K /mnt base base-devel linux-cachyos linux-firmware grub efibootmgr networkmanager nano fastfetch fuse clutter ntfs-3g dosfstools yay auto-cpufreq heroic-games-launcher mangohud goverlay lutris firefox --noconfirm
 
 #generating fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -180,6 +180,8 @@ echo "$userpasswd"
 echo "$userpasswd"
 ) | passwd $username
 
+echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
+
 mkdir -p /boot/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 grub-install /dev/$disk
@@ -196,7 +198,7 @@ mkdir test
 cd test
 curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
 tar xvf cachyos-repo.tar.xz && cd cachyos-repo
-./cachyos-repo.sh
+sudo ./cachyos-repo.sh
 
 yay -S cachyos-gaming-meta --noconfirm
 exit
