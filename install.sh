@@ -188,6 +188,9 @@ sed -i 's/#\[multilib\]/[multilib]/g' /etc/pacman.conf
 sed -i 's/#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/g' /etc/pacman.conf
 
 su eheea
+cd ~
+mkdir test
+cd test
 curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
 tar xvf cachyos-repo.tar.xz && cd cachyos-repo
 ./cachyos-repo.sh
