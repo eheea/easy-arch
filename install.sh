@@ -153,7 +153,7 @@ tar xvf cachyos-repo.tar.xz && cd cachyos-repo
 ./cachyos-repo.sh
 
 #installing the system
-pacstrap -K /mnt base base-devel linux-cachyos linux-firmware grub efibootmgr nano fastfetch fuse clutter ntfs-3g dosfstools yay auto-cpufreq heroic-games-launcher mangohud goverlay lutris firefox "$desktop_env" "$LM" --noconfirm
+pacstrap -K /mnt base base-devel linux-cachyos linux-firmware grub efibootmgr nano fastfetch fuse clutter ntfs-3g dosfstools yay auto-cpufreq heroic-games-launcher mangohud goverlay lutris firefox --noconfirm
 
 #generating fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -182,6 +182,7 @@ mkdir -p /boot/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 grub-install /dev/$disk
 
+pacman -Sy "$desktop_env" "$LM" --noconfirm
 systemctl enable NetworkManager $LM
 
 sed -i 's/#\[multilib\]/[multilib]/g' /etc/pacman.conf
