@@ -195,11 +195,10 @@ curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
 tar xvf cachyos-repo.tar.xz && cd cachyos-repo
 ./cachyos-repo.sh
 
-su eheea
-sudo pacman -Sy "$desktop_env" "$LM" --noconfirm
+
+pacman -Sy "$desktop_env" "$LM" --noconfirm
 sudo systemctl enable NetworkManager $LM
 
-yay -S cachyos-gaming-meta --noconfirm
 exit
 exit
 EOF
