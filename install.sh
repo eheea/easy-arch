@@ -186,17 +186,16 @@ mkdir -p /boot/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 grub-install /dev/$disk
 
-
-sed -i 's/#\[multilib\]/[multilib]/g' /etc/pacman.conf
-sed -i 's/#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/g' /etc/pacman.conf
-pacman -Sy
-
 curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
 tar xvf cachyos-repo.tar.xz && cd cachyos-repo
 ./cachyos-repo.sh
 
 
-pacman -Sy "$desktop_env" "$LM" --noconfirm
+sed -i 's/#\[multilib\]/[multilib]/g' /etc/pacman.conf
+sed -i 's/#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/g' /etc/pacman.conf
+pacman -Sy
+
+pacman -S "$desktop_env" "$LM" --noconfirm
 sudo systemctl enable NetworkManager $LM
 
 exit
