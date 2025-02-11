@@ -153,7 +153,7 @@ tar xvf cachyos-repo.tar.xz && cd cachyos-repo
 ./cachyos-repo.sh
 
 #installing the system
-pacstrap -K /mnt base base-devel linux-cachyos linux-firmware grub efibootmgr nano fastfetch fuse clutter ntfs-3g dosfstools yay auto-cpufreq heroic-games-launcher mangohud goverlay winetricks lutris firefox "$desktop_env" "$LM"
+pacstrap -K /mnt base base-devel linux-cachyos linux-firmware grub efibootmgr nano fastfetch fuse clutter ntfs-3g dosfstools yay auto-cpufreq heroic-games-launcher mangohud goverlay lutris firefox "$desktop_env" "$LM" --noconfirm
 
 #generating fstab
 genfstab -U /mnt >> /mnt/etc/fstab
