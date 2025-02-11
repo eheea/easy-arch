@@ -152,6 +152,8 @@ curl -O https://mirror.cachyos.org/cachyos-repo.tar.xz
 tar xvf cachyos-repo.tar.xz && cd cachyos-repo
 ./cachyos-repo.sh
 
+sed -i '/^ParallelDownloads = 5/s/^/#/' /etc/pacman.conf
+
 #installing the system
 pacstrap -K /mnt base base-devel linux-cachyos linux-firmware grub efibootmgr nano fastfetch fuse clutter ntfs-3g dosfstools yay auto-cpufreq heroic-games-launcher mangohud goverlay lutris firefox --noconfirm
 
